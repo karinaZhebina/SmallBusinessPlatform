@@ -1,0 +1,14 @@
+img {
+max-width: auto;
+max-height: auto;
+}
+section {
+ background-image: url("../pics/bg.jpg");
+ background-position: center;
+ background-size: cover;
+ background-repeat: no-repeat;
+ opacity: 0.78;
+}
+section div div{
+background: rgba(220, 220, 220, 0.82)
+}
