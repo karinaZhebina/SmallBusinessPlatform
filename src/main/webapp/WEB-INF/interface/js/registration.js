@@ -16,4 +16,11 @@
       form.classList.add('was-validated')
     }, false)
   })
+
 })()
+
+document.getElementById('business').style.display = 'none';
+
+function business() {
+  document.getElementById('business').style.display = 'block';
+}
