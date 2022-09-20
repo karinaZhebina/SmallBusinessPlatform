@@ -10,11 +10,13 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
 import static com.sbp.controller.command.CommandEnum.*;
+import static com.sbp.controller.command.impl.DefaultCommand.pathToJsp;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
@@ -43,33 +45,24 @@ public class FrontController extends HttpServlet {
   }
 
   @Override
-  protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
-//    commandMap.get(GET_ALL_PRODUCTS).process(req, resp);
+  protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
     doProcess(req, resp);
   }
 
   @Override
-  protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
+  protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
     doProcess(req, resp);
   }
 
-  @Override
-  protected void doPut(HttpServletRequest req, HttpServletResponse resp) {
-    doProcess(req, resp);
-  }
-
-  @Override
-  protected void doDelete(HttpServletRequest req, HttpServletResponse resp) {
-    doProcess(req, resp);
-  }
-
-  private void doProcess(HttpServletRequest req, HttpServletResponse resp) {
+  private void doProcess(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
     LOG.info("Call to FrontController#doProcess()");
     try {
       final CommandEnum command = getCommand(req.getParameter("command"));
       commandMap.get(command).process(req, resp);
     } catch (ControllerException e) {
       Throwable cause = getCause(e);
+      req.getSession().setAttribute("message", cause.getMessage());
+      req.getRequestDispatcher(pathToJsp(Command.prepareUri(req))).forward(req, resp);
       LOG.warning(cause.getMessage());
     }
   }
@@ -83,7 +76,7 @@ public class FrontController extends HttpServlet {
 
   private Throwable getCause(Throwable cause) {
     if (nonNull(cause.getCause())) {
-      cause = getCause(cause.getCause()); // recursive call of same method inside of it
+      cause = getCause(cause.getCause()); // recursive call of same method inside it
     }
     return cause;
   }

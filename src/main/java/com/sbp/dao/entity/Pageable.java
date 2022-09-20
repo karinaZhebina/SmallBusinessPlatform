@@ -8,19 +8,10 @@ public class Pageable<T> {
   private long totalElements;
   private int limit;
   private List<T> elements = new ArrayList<>();
-  private String sortBy = "id";
+  private String sortBy = "name";
   private String direction = "ASC";
 
   public Pageable() {
-  }
-
-  public Pageable(int pageNumber, long totalElements, int limit, List<T> elements, String sortBy, String direction) {
-    this.pageNumber = pageNumber;
-    this.totalElements = totalElements;
-    this.limit = limit;
-    this.elements = elements;
-    this.sortBy = sortBy;
-    this.direction = direction;
   }
 
   public int getPageNumber() {

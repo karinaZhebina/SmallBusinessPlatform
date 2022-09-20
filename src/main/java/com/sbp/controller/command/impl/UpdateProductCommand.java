@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.util.logging.Logger;
 
+import static com.sbp.controller.command.impl.DefaultCommand.pathToJsp;
+
 public class UpdateProductCommand implements Command {
 
   private static final Logger LOG = Logger.getLogger(UpdateProductCommand.class.getName());
@@ -20,19 +22,19 @@ public class UpdateProductCommand implements Command {
   public void process(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
     LOG.info("UPDATE PRODUCT STARTS.");
 
-    String productId = request.getParameter("product_id");
-    String lastCommand = "frontController?command=get_product_by_id&id=" + productId;
+    String message;
 
     try {
       Product product = getUpdatedProduct(request);
       if (productService.update(product)) {
-        lastCommand = "frontController?command=go_to_page&address=product_info.jsp&id=" + productId;
-        response.sendRedirect(lastCommand);
+        message = "Product is updated";
       } else {
-        response.getWriter().write("Product is not updated");
-        request.getRequestDispatcher(lastCommand).forward(request, response);
+        message = "No such product exists";
       }
+      request.getSession().setAttribute("message", message);
+      request.getRequestDispatcher(pathToJsp(Command.prepareUri(request))).forward(request, response);
     } catch (Exception e) {
+      request.getSession().setAttribute("message", e.getMessage());
       LOG.info(e.getMessage());
       throw new ControllerException(e);
     }

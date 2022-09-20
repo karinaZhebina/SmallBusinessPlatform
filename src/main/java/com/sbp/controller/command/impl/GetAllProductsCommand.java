@@ -46,6 +46,7 @@ public class GetAllProductsCommand implements Command {
       request.setAttribute("pageable", pageable);
       request.getRequestDispatcher(pathToJsp(Command.prepareUri(request))).forward(request, response);
     } catch (Exception e) {
+      request.getSession().setAttribute("message", e.getMessage());
       throw new ControllerException(e);
     }
   }

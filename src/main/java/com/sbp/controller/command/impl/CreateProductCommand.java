@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.util.logging.Logger;
 
+import static com.sbp.controller.command.impl.DefaultCommand.pathToJsp;
+
 public class CreateProductCommand implements Command {
   private static final Logger LOG = Logger.getLogger(CreateProductCommand.class.getName());
   private final ProductService productService = ServiceFactory.getInstance().getProductService();
@@ -18,15 +20,18 @@ public class CreateProductCommand implements Command {
   @Override
   public void process(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
     LOG.info("CREATE PRODUCT STARTS.");
-
+    String message;
     try {
       Product product = getProductFromClient(request);
       if (productService.create(product)) {
-        response.getWriter().write("Product is created");
+        message = "Product is created";
       } else {
-        response.getWriter().write("Invalid data provided");
+        message = "Product with such title already exists!";
       }
+      request.getSession().setAttribute("message", message);
+      request.getRequestDispatcher(pathToJsp(Command.prepareUri(request))).forward(request, response);
     } catch (Exception e) {
+      request.getSession().setAttribute("message", e.getMessage());
       LOG.info(e.getMessage());
       throw new ControllerException(e);
     }

@@ -2,13 +2,14 @@ package com.sbp.service.entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Page<T> {
   private int pageNumber;
   private long totalElements;
   private int limit;
   private List<T> elements = new ArrayList<>();
-  private String sortBy = "product_id";
+  private String sortBy = "name";
   private String direction = "ASC";
 
   public Page() {
@@ -81,9 +82,9 @@ public class Page<T> {
     if (pageNumber != page.pageNumber) return false;
     if (totalElements != page.totalElements) return false;
     if (limit != page.limit) return false;
-    if (elements != null ? !elements.equals(page.elements) : page.elements != null) return false;
-    if (sortBy != null ? !sortBy.equals(page.sortBy) : page.sortBy != null) return false;
-    return direction != null ? direction.equals(page.direction) : page.direction == null;
+    if (!Objects.equals(elements, page.elements)) return false;
+    if (!Objects.equals(sortBy, page.sortBy)) return false;
+    return Objects.equals(direction, page.direction);
   }
 
   @Override
@@ -97,15 +98,4 @@ public class Page<T> {
     return result;
   }
 
-  @Override
-  public String toString() {
-    return "Page{" +
-        "pageNumber=" + pageNumber +
-        ", totalElements=" + totalElements +
-        ", limit=" + limit +
-        ", elements=" + elements +
-        ", sortBy='" + sortBy + '\'' +
-        ", direction='" + direction + '\'' +
-        '}';
-  }
 }

@@ -25,6 +25,7 @@ public class GetProductByIdCommand implements Command {
     LOG.info("GET PRODUCT BY ID STARTS.");
 
     String productId = request.getParameter("product_id");
+    String message;
 
     try {
       Product product = productService.getById(productId);
@@ -32,10 +33,12 @@ public class GetProductByIdCommand implements Command {
       if (nonNull(product)) {
         request.setAttribute("product", product);
       } else {
-        response.getWriter().write("No such product was found");
+        message = "There is not such a product in DB";
+        request.getSession().setAttribute("message", message);
       }
       request.getRequestDispatcher("frontController?command=go_to_page&address=product_info.jsp").forward(request, response);
     } catch (ServiceException | ServletException | IOException e) {
+      request.getSession().setAttribute("message", e.getMessage());
       LOG.info(e.getMessage());
       throw new ControllerException(e);
     }

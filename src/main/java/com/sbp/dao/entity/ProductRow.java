@@ -5,15 +5,11 @@ import com.sbp.service.entity.Product;
 import java.math.BigDecimal;
 
 public class ProductRow {
-
   private String product_id;
   private String name;
   private String description;
   private String business_owner_id;
   private BigDecimal price;
-
-  public ProductRow() {
-  }
 
   public ProductRow(String product_id, String name, String description, String business_owner_id, BigDecimal price) {
     this.product_id = product_id;

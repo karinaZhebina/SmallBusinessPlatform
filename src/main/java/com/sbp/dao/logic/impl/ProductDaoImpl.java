@@ -53,7 +53,6 @@ public class ProductDaoImpl extends AbstractDao implements ProductDao {
 
   @Override
   public boolean save(ProductRow productRow) throws DaoException {
-    boolean result = false;
     Connection connection = getConnection();
     try (PreparedStatement ps = connection.prepareStatement(SAVE_ONE)) {
       ps.setString(1, productRow.getProduct_id());
@@ -96,7 +95,6 @@ public class ProductDaoImpl extends AbstractDao implements ProductDao {
         ps.setString(4, productRow.getBusiness_owner_id());
         ps.setBigDecimal(5, productRow.getPrice());
         ps.setString(6, productRow.getProduct_id());
-        ps.execute();
         result = ps.executeUpdate() != 0;
       }
       return result;
@@ -116,7 +114,7 @@ public class ProductDaoImpl extends AbstractDao implements ProductDao {
   }
 
   @Override
-  public Pageable<ProductRow> getAll(Pageable<ProductRow> productRowPageable) throws DaoException, SQLException {
+  public Pageable<ProductRow> getAll(Pageable<ProductRow> productRowPageable) throws DaoException {
     Connection connection = getConnection();
 
     final int offset = (productRowPageable.getPageNumber() - 1) * productRowPageable.getLimit();

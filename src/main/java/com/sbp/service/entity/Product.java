@@ -3,6 +3,7 @@ package com.sbp.service.entity;
 import com.sbp.dao.entity.ProductRow;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public class Product {
   private String product_id;
@@ -12,6 +13,10 @@ public class Product {
   private BigDecimal price;
 
   public Product() {
+  }
+
+  public Product(String product_id) {
+    this.product_id = product_id;
   }
 
   public Product(String product_id, String name, String description, String business_owner_id, BigDecimal price) {
@@ -28,10 +33,6 @@ public class Product {
     this.description = productRow.getDescription();
     this.business_owner_id = productRow.getBusiness_owner_id();
     this.price = productRow.getPrice();
-  }
-
-  public Product(String product_id) {
-    this.product_id = product_id;
   }
 
   public String getProduct_id() {
@@ -83,9 +84,9 @@ public class Product {
 
     if (!product_id.equals(product.product_id)) return false;
     if (!name.equals(product.name)) return false;
-    if (description != null ? !description.equals(product.description) : product.description != null) return false;
+    if (!Objects.equals(description, product.description)) return false;
     if (!business_owner_id.equals(product.business_owner_id)) return false;
-    return price != null ? price.equals(product.price) : product.price == null;
+    return Objects.equals(price, product.price);
   }
 
   @Override
@@ -98,14 +99,4 @@ public class Product {
     return result;
   }
 
-  @Override
-  public String toString() {
-    return "Product{" +
-        "product_id='" + product_id + '\'' +
-        ", name='" + name + '\'' +
-        ", description='" + description + '\'' +
-        ", business_owner_id='" + business_owner_id + '\'' +
-        ", price=" + price +
-        '}';
-  }
 }

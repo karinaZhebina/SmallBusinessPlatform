@@ -2,49 +2,30 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-    <title>
-        Product Info
-    </title>
+    <title>Product Info</title>
 </head>
 <body>
-<h2>Product Info Page!</h2>
+<h1>Product Info Page</h1>
 <div>
     <hr/>
-    <a href="/">Go to Home</a>
+    <a href="/" style="font-size: 20">Go to Home</a>
     <hr/>
 </div>
 
 <!----------   SHOW INFO  ---------->
-<div>
-    <form>
-        <a>
-            ${sessionScope.message}
-        </a>
-    </form>
-</div>
 <c:if test="${not empty requestScope.product}">
     <div>
-        <table class="table col-12">
+        <table cellspacing="16">
             <thead>
             <tr>
-                <td>
-                    <h4>product_id</h4>
-                </td>
-                <td>
-                    <h4>name</h4>
-                </td>
-                <td>
-                    <h4>description</h4>
-                </td>
-                <td>
-                    <h4>business_owner_id</h4>
-                </td>
-                <td>
-                    <h4>price</h4>
-                </td>
+                <td><h3>product_id</h3></td>
+                <td><h3>name</h3></td>
+                <td><h3>description</h3></td>
+                <td><h3>business_owner_id</h3></td>
+                <td><h3>price</h3></td>
+                <td><h3>delete</h3></td>
             </tr>
             </thead>
             <tbody>
@@ -54,36 +35,38 @@
                 <td>${requestScope.product.description}</td>
                 <td>${requestScope.product.business_owner_id}</td>
                 <td>${requestScope.product.price}</td>
+                <td>
+                    <form action="/product_info" method="POST">
+                        <input name="command" type="hidden" value="delete_product"/>
+                        <input name="product_id" type="hidden" value="${product.product_id}"/>
+                        <button class="btn btn-primary" type="submit">Delete</button>
+                    </form>
+                </td>
             </tr>
             </tbody>
         </table>
     </div>
-</c:if>
 
-</br>
-    <!----------   UPDATE (ADMIN)  ---------->
+    <!----------  UPDATE  ---------->
     <div class="main-block">
-        <form action="/product_info" class="form-group" id="update_product" method="PUT">
+        <form action="/" class="form-group" id="update_product" method="POST">
             <input name="command" type="hidden" value="update_product"/>
-            <div class="form-group col-md-6">
-                <input class="form-control" name="product_id" placeholder="${product_id}" type="text"/>
-            </div>
-            <div class="form-group col-md-6">
-                <input class="form-control" name="name" placeholder="${name}" type="text"/>
-            </div>
-            <div class="form-group col-md-6">
-                <input class="form-control" name="description" placeholder="${description}" type="text"/>
-            </div>
-            <div class="form-group col-md-6">
-                <input class="form-control" name="business_owner_id" placeholder="${business_owner_id}" type="text"/>
-            </div>
-            <div class="form-group col-md-6">
-                <input class="form-control" name="price" placeholder="${price}" type="text"/>
+            <input name="product_id" type="hidden" value="${product.product_id}"/>
+            <div>
+                <input name="name" placeholder="name${name}" type="text" style="font-size:18" size="40"/>
             </div>
             <div>
-                <button class="btn btn-primary" form="update_product" type="submit">Update Product</button>
+                <input name="description" placeholder="description${description}" type="text" style="font-size:18" size="40"/>
+            </div>
+            <div>
+                <input name="business_owner_id" placeholder="business_owner_id${business_owner_id}" type="text" style="font-size:18" size="40"/>
+            </div>
+            <div>
+                <input name="price" placeholder="price${price}" type="text" style="font-size:18" size="40"/>
             </div>
         </form>
+        <button class="btn btn-primary" form="update_product" type="submit" style="font-size:16">Update Product</button>
     </div>
+</c:if>
 </body>
 </html>
